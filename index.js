@@ -16,7 +16,7 @@ app.options("*", cors())
 
 app.use("/api/dev", devRoutes)
 
-const PORT = 5000
+const PORT = process.env.PORT || 8080
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`)
 })
