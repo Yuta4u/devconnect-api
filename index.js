@@ -1,0 +1,25 @@
+// app.js
+require("dotenv").config()
+const express = require("express")
+const bodyParser = require("body-parser")
+const cors = require("cors")
+const serverless = require("serverless-http")
+
+// routes
+const devRoutes = require("./routes/dev")
+const app = express()
+
+// set up
+app.use(bodyParser.json())
+app.use(cors())
+app.options("*", cors())
+
+app.use("/api/dev", devRoutes)
+
+const PORT = 5000
+app.listen(PORT, () => {
+  console.log(`Server is running on port ${PORT}`)
+})
+
+module.exports = app
+module.exports.handler = serverless(app)
