@@ -7,6 +7,8 @@ const serverless = require("serverless-http")
 
 // routes
 const devRoutes = require("./routes/dev")
+const recruiterRoutes = require("./routes/recruiter")
+const loginRoutes = require("./routes/login")
 const app = express()
 
 // set up
@@ -14,7 +16,9 @@ app.use(bodyParser.json())
 app.use(cors())
 app.options("*", cors())
 
+app.use("/api/login", loginRoutes)
 app.use("/api/dev", devRoutes)
+app.use("/api/recruiter", recruiterRoutes)
 
 const PORT = process.env.PORT || 8080
 app.listen(PORT, () => {

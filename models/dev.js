@@ -33,9 +33,9 @@ const createDev = async ({ username, email, password }) => {
 
   if (result.rows) {
     const url = `https://devconnect-api.vercel.app/api/dev/activate/${activateToken}`
+    // const url = `https://localhost:6543/api/dev/activate/${activateToken}`
     const mailOptions = {
       from: process.env.EMAIL,
-      // from: "devconnect.adm1n@gmail.com",
       to: email,
       subject: "Verify your email",
       text: `Click on this link to verify your email: ${url}`,
@@ -96,7 +96,7 @@ const activateAccount = async (token) => {
       }
       const q = "UPDATE dev SET is_active = 1 where email = $1 RETURNING *"
       const result = await pool.query(q, [decoded.email])
-      return result.rows
+      return result.rows[0]
     }
   )
   const res = await verifiyToken
