@@ -76,21 +76,15 @@ const loginDevController = async (req, res) => {
 const activateAccountController = async (req, res) => {
   try {
     const dev = await activateAccount(req.params.token)
-    if (dev === 1) {
-      res.status(500).json({
-        status: 500,
-        message: "error server cuy",
-      })
-    }
-    if (dev === 2) {
-      res.status(401).json({
-        status: 401,
+    if (dev === 1 || dev === 2) {
+      return res.status(400).json({
+        status: 402,
         message: "Invalid Token",
       })
     }
-    res.status(201).json({
+    return res.status(200).json({
       status: 201,
-      message: `${dev.username} akun anda telah aktif.`,
+      message: `${dev[0].username} akun anda telah aktif.`,
     })
   } catch (error) {
     console.log("error")

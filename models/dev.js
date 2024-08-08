@@ -88,7 +88,6 @@ const activateAccount = async (token) => {
     process.env.JWT_SECRET,
     async (err, decoded) => {
       if (err) {
-        console.log("token error")
         return 1
       }
       if (!decoded) {
@@ -96,11 +95,11 @@ const activateAccount = async (token) => {
       }
       const q = "UPDATE dev SET is_active = 1 where email = $1 RETURNING *"
       const result = await pool.query(q, [decoded.email])
-      return result.rows[0]
+      return result.rows
     }
   )
   const res = await verifiyToken
-  return res[0]
+  return res
 }
 
 module.exports = {
