@@ -27,10 +27,15 @@ const createDev = async ({ username, email, password }) => {
     "INSERT INTO dev (username, email, password) VALUES ($1, $2, $3) RETURNING *"
   const result = await pool.query(q, [username, email, hashedPassword])
 
+  const activateToken = jwt.sign({ email }, process.env.JWT_SECRET, {
+    expiresIn: "1h",
+  })
+
   if (result.rows) {
-    const url = `www.google.com`
+    const url = `https://devconnect-api.vercel.app/api/dev/activate/${activateToken}`
     const mailOptions = {
       from: process.env.EMAIL,
+      // from: "devconnect.adm1n@gmail.com",
       to: email,
       subject: "Verify your email",
       text: `Click on this link to verify your email: ${url}`,
@@ -77,8 +82,30 @@ const login = async ({ email, password }) => {
   }
 }
 
+const activateAccount = async (token) => {
+  const verifiyToken = jwt.verify(
+    token,
+    process.env.JWT_SECRET,
+    async (err, decoded) => {
+      if (err) {
+        console.log("token error")
+        return 1
+      }
+      if (!decoded) {
+        return 2
+      }
+      const q = "UPDATE dev SET is_active = 1 where email = $1 RETURNING *"
+      const result = await pool.query(q, [decoded.email])
+      return result.rows
+    }
+  )
+  const res = await verifiyToken
+  return res[0]
+}
+
 module.exports = {
   getAllDev,
   createDev,
   login,
+  activateAccount,
 }
