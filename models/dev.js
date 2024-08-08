@@ -49,39 +49,6 @@ const createDev = async ({ username, email, password }) => {
   }
 }
 
-const login = async ({ email, password }) => {
-  const q = "SELECT * FROM dev WHERE email = $1"
-  const result = await pool.query(q, [email])
-  if (result.rowCount) {
-    const userLogin = result.rows[0]
-    const isValidPassword = bcrypt.compareSync(password, userLogin.password)
-    if (!isValidPassword) {
-      return 2
-    }
-    if (!userLogin.is_active) {
-      return 3
-    }
-    const token = jwt.sign(
-      {
-        id: userLogin.dev_id,
-        username: userLogin.username,
-        email: userLogin.email,
-        role: userLogin.role,
-        skill: userLogin.skill,
-        linkedin: userLogin.linkedin,
-        profile_img: userLogin.profile_img,
-      },
-      process.env.JWT_SECRET,
-      {
-        expiresIn: "1h",
-      }
-    )
-    return token
-  } else {
-    return 1
-  }
-}
-
 const activateAccount = async (token) => {
   const verifiyToken = jwt.verify(
     token,
@@ -105,6 +72,5 @@ const activateAccount = async (token) => {
 module.exports = {
   getAllDev,
   createDev,
-  login,
   activateAccount,
 }

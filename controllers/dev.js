@@ -1,9 +1,4 @@
-const {
-  getAllDev,
-  createDev,
-  login,
-  activateAccount,
-} = require("../models/dev")
+const { getAllDev, createDev, activateAccount } = require("../models/dev")
 
 const getAllDevController = async (req, res) => {
   try {
@@ -43,36 +38,6 @@ const createDevController = async (req, res) => {
   }
 }
 
-const loginDevController = async (req, res) => {
-  try {
-    const dev = await login(req.body)
-    if (dev === 1) {
-      res.json({
-        status: 200,
-        message: "Email yang anda masukkan belum terdaftar.",
-      })
-    } else if (dev === 2) {
-      res.json({
-        status: 204,
-        message: "Password yang anda masukkan salah.",
-      })
-    } else if (dev === 3) {
-      res.json({
-        status: 204,
-        message: "Akun anda belum melakukan aktivasi, silahkan cek email anda.",
-      })
-    }
-    res.json({
-      status: 200,
-      message: "Berhasil login",
-      token: dev,
-    })
-  } catch (error) {
-    console.log("error login dev")
-    res.status(500).json({ error: error.message })
-  }
-}
-
 const activateAccountController = async (req, res) => {
   try {
     const dev = await activateAccount(req.params.token)
@@ -82,6 +47,7 @@ const activateAccountController = async (req, res) => {
         message: "Invalid Token",
       })
     }
+
     return res.status(200).json({
       status: 201,
       message: `${dev[0].username} akun anda telah aktif.`,
@@ -97,6 +63,5 @@ const activateAccountController = async (req, res) => {
 module.exports = {
   getAllDevController,
   createDevController,
-  loginDevController,
   activateAccountController,
 }
