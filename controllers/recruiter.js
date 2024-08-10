@@ -6,8 +6,8 @@ const {
 
 const getAllRecruiterController = async (req, res) => {
   try {
-    const dev = await getAllRecruiter()
-    res.json(dev)
+    const recruiter = await getAllRecruiter()
+    res.json(recruiter)
   } catch (error) {
     res.status(500).json({ error: error.message })
   }
@@ -15,16 +15,16 @@ const getAllRecruiterController = async (req, res) => {
 
 const createRecruiterController = async (req, res) => {
   try {
-    const dev = await createRecruiter(req.body)
+    const recruiter = await createRecruiter(req.body)
     // hanlde duplicate email
-    if (dev === 1) {
+    if (recruiter === 1) {
       return res.json({
         status: 200,
         message: "Email sudah terdaftar",
       })
     }
     // handle error kirim email
-    else if (dev === 2) {
+    else if (recruiter === 2) {
       return res.json({
         status: 402,
         message: "Gagal mengirim email",
@@ -34,7 +34,7 @@ const createRecruiterController = async (req, res) => {
       status: 201,
       message:
         "Pendaftaran berhasil, silahkan cek email anda untuk verifikasi.",
-      data: dev,
+      data: recruiter,
     })
   } catch (error) {
     console.log("error cuy", error)
@@ -44,8 +44,8 @@ const createRecruiterController = async (req, res) => {
 
 const activateAccountController = async (req, res) => {
   try {
-    const dev = await activateAccount(req.params.token)
-    if (dev === 1 || dev === 2) {
+    const recruiter = await activateAccount(req.params.token)
+    if (recruiter === 1 || recruiter === 2) {
       return res.status(400).json({
         status: 402,
         message: "Invalid Token",
@@ -54,7 +54,7 @@ const activateAccountController = async (req, res) => {
 
     return res.status(200).json({
       status: 201,
-      message: `${dev[0].username} akun anda telah aktif.`,
+      message: `${recruiter[0].email} akun anda telah aktif.`,
     })
   } catch (error) {
     console.log("error")
