@@ -32,7 +32,7 @@ const createRecruiter = async ({ company_name, email, password }) => {
   })
 
   if (result.rows) {
-    const url = `https://devconnect-api.vercel.app/api/dev/activate/${activateToken}`
+    const url = `https://devconnect-api.vercel.app/api/recruiter/activate/${activateToken}`
     // const url = `https://localhost:6543/api/dev/activate/${activateToken}`
     const mailOptions = {
       from: process.env.EMAIL,
