@@ -1,7 +1,16 @@
 const pool = require("../config/pool")
 
 const getAllPost = async () => {
-  const q = "SELECT * FROM post"
+  const q = `SELECT p.* AS post, json_build_object(
+    'id', r.recruiter_id,
+    'email', r.email,
+    'profile_img', r.profile_img,
+    'description', r.description,
+    'company_name', r.company_name,
+    'employee', r.employee,
+    'member_since', r.created_at
+  ) AS recruiter 
+  FROM post p JOIN recruiter r ON p.recruiter_id = r.recruiter_id`
   const result = await pool.query(q)
   return result.rows
 }
