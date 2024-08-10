@@ -9,6 +9,7 @@ const serverless = require("serverless-http")
 const devRoutes = require("./routes/dev")
 const recruiterRoutes = require("./routes/recruiter")
 const loginRoutes = require("./routes/login")
+const postRoutes = require("./routes/post")
 const app = express()
 
 // set up
@@ -19,6 +20,7 @@ app.options("*", cors())
 app.use("/api/login", loginRoutes)
 app.use("/api/dev", devRoutes)
 app.use("/api/recruiter", recruiterRoutes)
+app.use("/api/post", postRoutes)
 
 const PORT = process.env.PORT || 8080
 app.listen(PORT, () => {
